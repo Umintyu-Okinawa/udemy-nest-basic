@@ -3,9 +3,8 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import Page1 from "./pages/bookmarks";
-import Page2 from "./pages/bookmarks/new";
-import Page3 from "./pages/page3";
+import PageContent from "./pages/bookmarks";
+import New from "./pages/bookmarks/new";
 
 function App() {
   return (
@@ -20,17 +19,13 @@ function App() {
             <li>
               <Link to="/bookmarks/new">new</Link>
             </li>
-            <li>
-              <Link to="/page3">Page3</Link>
-            </li>
           </ul>
         </nav>
 
         {/* ルーティングの設定 */}
         <Routes>
-          <Route path="/bookmarks" element={<Page1 />} />
-          <Route path="/bookmarks/new" element={<Page2 />} />
-          <Route path="/page3" element={<Page3 />} />
+          <Route path="/bookmarks" element={<PageContent />} />
+          <Route path="/bookmarks/new" element={<New />} />
         </Routes>
       </Router>
     </div>
