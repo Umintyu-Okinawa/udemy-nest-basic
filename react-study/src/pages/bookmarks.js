@@ -7,7 +7,7 @@ const PageContent = () => {
 
   return (
     <div>
-      <h1>page2</h1>
+      <h1>一覧</h1>
       <ul>
         {bookmarks.map((book) => (
           <li key={book.id}>{book.title}</li>
@@ -17,7 +17,7 @@ const PageContent = () => {
   );
 };
 
-const Page2 = () => {
+const Page1 = () => {
   return (
     <BookMarksProvider>
       <PageContent />
@@ -25,7 +25,7 @@ const Page2 = () => {
   );
 };
 
-export default Page2;
+export default Page1;
 
 // import { useState } from "react";
 // import { useBookmark } from "../context/BookMarksContext";

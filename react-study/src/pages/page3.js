@@ -7,7 +7,7 @@ const PageContent = () => {
 
   return (
     <div>
-      <h1>page3</h1>
+      <h1>詳細</h1>
       <ul>
         {bookmarks.map((book) => (
           <li key={book.id}>{book.title}</li>

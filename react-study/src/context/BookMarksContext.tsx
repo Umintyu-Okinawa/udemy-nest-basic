@@ -1,6 +1,7 @@
 import { Booktype } from "../types/BookMarks";
 import { useContext, createContext, useState, ReactNode } from "react";
 
+//型定義
 type BookContextType = {
   bookmarks: Booktype[];
 };

@@ -3,8 +3,8 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import Page1 from "./pages/page1";
-import Page2 from "./pages/page2";
+import Page1 from "./pages/bookmarks";
+import Page2 from "./pages/bookmarks/new";
 import Page3 from "./pages/page3";
 
 function App() {
@@ -15,10 +15,10 @@ function App() {
         <nav>
           <ul>
             <li>
-              <Link to="/page1">Page1</Link>
+              <Link to="/bookmarks">bookmarks</Link>
             </li>
             <li>
-              <Link to="/page2">Page2</Link>
+              <Link to="/bookmarks/new">new</Link>
             </li>
             <li>
               <Link to="/page3">Page3</Link>
@@ -28,8 +28,8 @@ function App() {
 
         {/* ルーティングの設定 */}
         <Routes>
-          <Route path="/page1" element={<Page1 />} />
-          <Route path="/page2" element={<Page2 />} />
+          <Route path="/bookmarks" element={<Page1 />} />
+          <Route path="/bookmarks/new" element={<Page2 />} />
           <Route path="/page3" element={<Page3 />} />
         </Routes>
       </Router>

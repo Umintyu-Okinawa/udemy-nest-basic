@@ -1,13 +1,13 @@
 import React from "react";
 
-import { BookMarksProvider, useBookmark } from "../context/BookMarksContext";
+import { BookMarksProvider, useBookmark } from "../../context/BookMarksContext";
 
 const PageContent = () => {
   const { bookmarks } = useBookmark();
 
   return (
     <div>
-      <h1>page1</h1>
+      <h1>新規作成</h1>
       <ul>
         {bookmarks.map((book) => (
           <li key={book.id}>{book.title}</li>
@@ -17,7 +17,7 @@ const PageContent = () => {
   );
 };
 
-const Page1 = () => {
+const Page2 = () => {
   return (
     <BookMarksProvider>
       <PageContent />
@@ -25,7 +25,7 @@ const Page1 = () => {
   );
 };
 
-export default Page1;
+export default Page2;
 
 // import { useState } from "react";
 // import { useBookmark } from "../context/BookMarksContext";
