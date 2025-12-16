@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Bookmark } from '../types/Bookmark';
+import type { Bookmark } from '../types/Bookmark';
 import './BookmarkListItem.css';
 
 interface BookmarkListItemProps {
