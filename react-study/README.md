@@ -1,46 +1,146 @@
-# Getting Started with Create React App
+# ブックマーク管理アプリ（MVP）
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React + TypeScriptで実装されたブックマーク管理アプリケーションです。
 
-## Available Scripts
+## 技術スタック
 
-In the project directory, you can run:
+- React 19.2.3
+- TypeScript 4.9.5
+- React Router (react-router-dom)
+- useContext（状態管理、メモリのみ）
 
-### `npm start`
+## 起動手順
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. 依存関係のインストール
+```bash
+npm install
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. 開発サーバーの起動
+```bash
+npm start
+```
 
-### `npm test`
+3. ブラウザで [http://localhost:3000](http://localhost:3000) を開く
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 仕様
 
-### `npm run build`
+### データ型
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```typescript
+type Bookmark = {
+  id: string;
+  title: string;
+  url: string;
+  note?: string;
+  createdAt: string; // ISO string
+};
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### ルーティング
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `/` → `/bookmarks` にリダイレクト
+- `/bookmarks` → ブックマーク一覧
+- `/bookmarks/new` → 新規作成
+- `/bookmarks/:id` → 詳細表示
+- その他 → 404 Not Found
 
-### `npm run eject`
+### 機能
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### 1. 新規作成
+- タイトル（必須、1-50文字）
+- URL（必須、http/https形式）
+- ノート（任意、0-300文字）
+- バリデーション：送信時＋入力中（一度触れたフィールドのみ）
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### 2. 一覧
+- 作成日時降順（新しい順）で表示
+- タイトルクリックで外部URLを別タブで安全に開く（`target="_blank" rel="noopener noreferrer"`）
+- 削除ボタンで即削除
+- 行クリックまたは「詳細」リンクで詳細ページへ遷移
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### 3. 詳細
+- ID、タイトル、URL、ノート、作成日時を表示
+- 削除可能（削除後は一覧に戻る）
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### 4. グローバルメニュー
+- 常時表示のヘッダー
+- 「一覧」「新規作成」リンク
 
-## Learn More
+### 状態管理
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- useContextを使用（メモリのみ、永続化なし）
+- ページ遷移しても状態は保持される（SPA内）
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### セキュリティ
+
+- 外部リンクは必ず `target="_blank" rel="noopener noreferrer"` を使用
+
+## ディレクトリ構成
+
+```
+src/
+├── components/
+│   ├── BookmarkForm.tsx          # フォーム＋バリデーション
+│   ├── BookmarkForm.css
+│   ├── BookmarkListItem.tsx      # 一覧アイテム
+│   └── BookmarkListItem.css
+├── contexts/
+│   └── BookmarkContext.tsx       # 状態管理Context
+├── layouts/
+│   ├── AppLayout.tsx             # レイアウト（Header + Outlet）
+│   └── AppLayout.css
+├── pages/
+│   ├── BookmarksListPage.tsx     # 一覧ページ
+│   ├── BookmarksListPage.css
+│   ├── NewBookmarkPage.tsx       # 新規作成ページ
+│   ├── NewBookmarkPage.css
+│   ├── BookmarkDetailPage.tsx   # 詳細ページ
+│   ├── BookmarkDetailPage.css
+│   ├── NotFoundPage.tsx          # 404ページ
+│   └── NotFoundPage.css
+├── types/
+│   └── Bookmark.ts               # 型定義
+├── App.tsx                        # ルーティング設定
+└── index.tsx                      # エントリーポイント
+```
+
+## 手動テスト手順
+
+1. **新規作成のバリデーション**
+   - タイトル未入力で送信 → エラー表示
+   - タイトル51文字以上で送信 → エラー表示
+   - URL未入力で送信 → エラー表示
+   - 無効なURL形式で送信 → エラー表示
+   - ノート301文字以上で送信 → エラー表示
+   - すべて有効な値で送信 → 一覧ページに遷移
+
+2. **一覧表示**
+   - 作成したブックマークが新しい順で表示されることを確認
+   - タイトルクリックで外部URLが別タブで開くことを確認
+   - 行クリックで詳細ページに遷移することを確認
+   - 「詳細」リンクで詳細ページに遷移することを確認
+
+3. **削除機能**
+   - 一覧ページで削除ボタンをクリック → 即削除されることを確認
+   - 詳細ページで削除ボタンをクリック → 削除され一覧に戻ることを確認
+
+4. **詳細表示**
+   - 詳細ページで全情報（ID、タイトル、URL、ノート、作成日時）が表示されることを確認
+   - タイトルクリックで外部URLが別タブで開くことを確認
+
+5. **状態保持**
+   - ブックマークを作成後、ページ遷移しても状態が保持されることを確認
+   - ブラウザをリロードすると状態がリセットされることを確認（メモリのみのため）
+
+6. **ルーティング**
+   - `/` にアクセス → `/bookmarks` にリダイレクトされることを確認
+   - 存在しないパスにアクセス → 404ページが表示されることを確認
+
+7. **グローバルメニュー**
+   - すべてのページでヘッダーが表示されることを確認
+   - 「一覧」「新規作成」リンクが機能することを確認
+
+8. **イベント競合の確認**
+   - 一覧ページでタイトルをクリック → 外部URLが開き、詳細ページに遷移しないことを確認
+   - 一覧ページで行の空白部分をクリック → 詳細ページに遷移することを確認

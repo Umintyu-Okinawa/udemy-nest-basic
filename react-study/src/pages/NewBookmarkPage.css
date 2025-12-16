@@ -1,0 +1,10 @@
+.new-bookmark-page {
+  width: 100%;
+  max-width: 600px;
+}
+
+.new-bookmark-page h1 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+

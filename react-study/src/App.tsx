@@ -1,34 +1,28 @@
-import React from "react";
-//import logo from "./logo.svg";
-import "./App.css";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-
-import PageContent from "./pages/bookmarks";
-import New from "./pages/bookmarks/new";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BookmarkProvider } from './contexts/BookmarkContext';
+import { AppLayout } from './layouts/AppLayout';
+import { BookmarksListPage } from './pages/BookmarksListPage';
+import { NewBookmarkPage } from './pages/NewBookmarkPage';
+import { BookmarkDetailPage } from './pages/BookmarkDetailPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+import './App.css';
 
 function App() {
   return (
-    <div>
+    <BookmarkProvider>
       <Router>
-        {/* ナビゲーションメニュー */}
-        <nav>
-          <ul>
-            <li>
-              <Link to="/bookmarks">bookmarks</Link>
-            </li>
-            <li>
-              <Link to="/bookmarks/new">new</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* ルーティングの設定 */}
         <Routes>
-          <Route path="/bookmarks" element={<PageContent />} />
-          <Route path="/bookmarks/new" element={<New />} />
+          <Route path="/" element={<Navigate to="/bookmarks" replace />} />
+          <Route element={<AppLayout />}>
+            <Route path="/bookmarks" element={<BookmarksListPage />} />
+            <Route path="/bookmarks/new" element={<NewBookmarkPage />} />
+            <Route path="/bookmarks/:id" element={<BookmarkDetailPage />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
-    </div>
+    </BookmarkProvider>
   );
 }
 
