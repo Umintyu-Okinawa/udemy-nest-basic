@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateItemDto } from './dto/create-item.dto';
 import { Item } from './items.model';
 
 @Injectable()
@@ -14,11 +15,6 @@ export class ItemsService {
     if (!item) {
       throw new NotFoundException('Item not found');
     }
-    return item;
-  }
-
-  create(item: Item) {
-    this.items.push(item);
     return item;
   }
 
@@ -42,5 +38,16 @@ export class ItemsService {
     this.items.splice(index, 1);
   }
 
+  create(createItemDto: CreateItemDto): Item {
+    const item: Item = {
+      id: createItemDto.id,
+      name: createItemDto.name,
+      price: createItemDto.price,
+      description: createItemDto.description,
+      status: 'ON_SALE',
+    };
+    this.items.push(item);
+    return item;
+  }
 
 }
