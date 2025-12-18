@@ -1,28 +1,28 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ItemsService } from './items.service';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { Item } from './items.model';
+import { ItemsService } from './items.service';
 
 @Controller('items')
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
 
-  @Get('/')
+  @Get()
   findAll(): Item[] {
     return this.itemsService.findAll();
   }
 
-  @Get('/:id') // /items/:id
+  @Get(':id')
   findById(@Param('id') id: string): Item {
     return this.itemsService.findById(id);
   }
 
-  @Post('/')
+  @Post()
   create(
     @Body('id') id: string,
     @Body('name') name: string,
     @Body('price') price: number,
     @Body('description') description: string,
-  ) {
+  ): Item {
     const item: Item = {
       id,
       name,
@@ -32,4 +32,9 @@ export class ItemsController {
     };
     return this.itemsService.create(item);
   }
+
+@Put(":id")
+   updatestatus(@Param("id") id: string, @Body("status") status: "ON_SALE" | "SOLD_OUT"): Item {
+    return this.itemsService.update(id, {status});
+   }
 }
