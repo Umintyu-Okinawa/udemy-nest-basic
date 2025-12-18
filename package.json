@@ -16,7 +16,8 @@
     "@nestjs/core": "^10.4.9",
     "@nestjs/platform-express": "^10.4.9",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "uuid": "8.3.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.9",
@@ -26,5 +27,3 @@
     "typescript": "^5.7.2"
   }
 }
-
-

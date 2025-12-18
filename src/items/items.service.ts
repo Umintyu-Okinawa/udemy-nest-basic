@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { Item } from './items.model';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class ItemsService {
@@ -40,7 +41,7 @@ export class ItemsService {
 
   create(createItemDto: CreateItemDto): Item {
     const item: Item = {
-      id: createItemDto.id,
+     id: uuid(),
       name: createItemDto.name,
       price: createItemDto.price,
       description: createItemDto.description,
