@@ -34,7 +34,13 @@ export class ItemsService {
     return updated;
   }
 
-
+  delete(id: string): void {
+    const index = this.items.findIndex((it) => it.id === id);
+    if (index === -1) {
+      throw new NotFoundException('Item not found');
+    }
+    this.items.splice(index, 1);
+  }
 
 
 }
