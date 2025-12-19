@@ -23,11 +23,13 @@ export class ItemsService {
     return foundItem;
   }
 
-  update(id: string, patch: Partial<Omit<Item, 'id'>>): Item {
+  async updateStatus(id: string, patch: Partial<Omit<Item, 'id'>>): Promise<Item> {
     const index = this.items.findIndex((it) => it.id === id);
     if (index === -1) {
       throw new NotFoundException('Item not found');
     }
+
+    
 
     const current = this.items[index];
     const updated: Item = { ...current, ...patch, id: current.id };

@@ -27,7 +27,7 @@ export class ItemsController {
     @Param('id') id: string,
     @Body('status') status: 'ON_SALE' | 'SOLD_OUT',
   ): Promise<Item> {
-    return this.itemsService.update(id, { status });
+    return this.itemsService.updateStatus(id, { status });
   }
 
   @Delete(':id')
