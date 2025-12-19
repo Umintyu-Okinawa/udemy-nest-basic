@@ -142,3 +142,6 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/node
+
+# Postgres の永続データ（生成物）だけ無視
+/docker/postgres/pgdata/

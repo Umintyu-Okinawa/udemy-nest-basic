@@ -1,29 +1,35 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
-import { Item } from './items.model';
-import { v4 as uuid } from 'uuid';
+import { Item, ItemStatus } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ItemsService {
-  private readonly items: Item[] = [];
+    constructor(private readonly prismaService: PrismaService) {}
 
-  findAll() {
-    return this.items;
+ 
+
+  async findAll(): Promise<Item[]> {
+    return await this.prismaService.item.findMany();
   }
 
-  findById(id: string): Item {
-    const item = this.items.find((it) => it.id === id);
-    if (!item) {
+  async findById(id: string): Promise<Item> {
+    const foundItem = await this.prismaService.item.findUnique({
+      where: { id },
+    });
+    if (!foundItem) {
       throw new NotFoundException('Item not found');
     }
-    return item;
+    return foundItem;
   }
 
-  update(id: string, patch: Partial<Omit<Item, 'id'>>): Item {
+  async updateStatus(id: string, patch: Partial<Omit<Item, 'id'>>): Promise<Item> {
     const index = this.items.findIndex((it) => it.id === id);
     if (index === -1) {
       throw new NotFoundException('Item not found');
     }
+
+    
 
     const current = this.items[index];
     const updated: Item = { ...current, ...patch, id: current.id };
@@ -39,16 +45,17 @@ export class ItemsService {
     this.items.splice(index, 1);
   }
 
-  create(createItemDto: CreateItemDto): Item {
-    const item: Item = {
-     id: uuid(),
-      name: createItemDto.name,
-      price: createItemDto.price,
-      description: createItemDto.description,
-      status: 'ON_SALE',
-    };
-    this.items.push(item);
-    return item;
+  async create(createItemDto: CreateItemDto): Promise<Item> {
+    const{name,price,description} = createItemDto;
+    return await this.prismaService.item.create({
+      data:{
+        name,
+        price,
+        description,
+        status: ItemStatus.ON_SALE as ItemStatus,
+      },
+    });
   }
 
+  
 }
