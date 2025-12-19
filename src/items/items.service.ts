@@ -24,25 +24,24 @@ export class ItemsService {
   }
 
   async updateStatus(id: string, patch: Partial<Omit<Item, 'id'>>): Promise<Item> {
-    const index = this.items.findIndex((it) => it.id === id);
-    if (index === -1) {
+    try {
+      return await this.prismaService.item.update({
+        where: { id },
+        data: patch,
+      });
+    } catch (error) {
       throw new NotFoundException('Item not found');
     }
-
-    
-
-    const current = this.items[index];
-    const updated: Item = { ...current, ...patch, id: current.id };
-    this.items[index] = updated;
-    return updated;
   }
 
-  delete(id: string): void {
-    const index = this.items.findIndex((it) => it.id === id);
-    if (index === -1) {
+  async delete(id: string): Promise<void> {
+    try {
+      await this.prismaService.item.delete({
+        where: { id },
+      });
+    } catch (error) {
       throw new NotFoundException('Item not found');
     }
-    this.items.splice(index, 1);
   }
 
   async create(createItemDto: CreateItemDto): Promise<Item> {
@@ -53,6 +52,7 @@ export class ItemsService {
         price,
         description,
         status: ItemStatus.ON_SALE as ItemStatus,
+        userId:"",
       },
     });
   }
