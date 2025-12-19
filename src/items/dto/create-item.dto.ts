@@ -1,20 +1,17 @@
-import { IsString, IsNotEmpty, MaxLength, IsInt, Min ,IsOptional} from "class-validator";
+import { IsString, IsNotEmpty, IsInt, IsOptional, MaxLength } from 'class-validator';
 
 export class CreateItemDto {
-@IsString()
-@IsNotEmpty()
-@MaxLength(40)
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
   name!: string;
 
-
-@IsInt()
-@Min(1)
+  @IsInt()
+  @IsNotEmpty()
   price!: number;
 
-
-
-  @IsOptional()
   @IsString()
-  @MaxLength(100)
+  @IsOptional()
   description?: string;
 }
+

@@ -1,7 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { CreateItemDto } from './dto/create-item.dto';
 import { Item } from '@prisma/client';
 import { ItemsService } from './items.service';
+import { RequestUser } from 'src/types/requestUser';
 
 @Controller('items')
 export class ItemsController {
@@ -18,20 +30,30 @@ export class ItemsController {
   }
 
   @Post()
-  async create(@Body() createItemDto: CreateItemDto): Promise<Item> {
-    return await this.itemsService.create(createItemDto);
+  @UseGuards(AuthGuard('jwt'))
+  async create(
+    @Body() createItemDto: CreateItemDto,
+    @Request() req: { user: RequestUser },
+  ): Promise<Item> {
+    return await this.itemsService.create(createItemDto, req.user.id);
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard('jwt'))
   async updateStatus(
     @Param('id') id: string,
     @Body('status') status: 'ON_SALE' | 'SOLD_OUT',
+    @Request() req: { user: RequestUser },
   ): Promise<Item> {
-    return this.itemsService.updateStatus(id, { status });
+    return this.itemsService.updateStatus(id, { status }, req.user.id);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
-    await this.itemsService.delete(id);
+  @UseGuards(AuthGuard('jwt'))
+  async delete(
+    @Param('id') id: string,
+    @Request() req: { user: RequestUser },
+  ): Promise<void> {
+    await this.itemsService.delete(id, req.user.id);
   }
 }
