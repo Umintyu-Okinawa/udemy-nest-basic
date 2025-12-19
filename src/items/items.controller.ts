@@ -8,12 +8,12 @@ export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
 
   @Get()
-  findAll(): Item[] {
-    return this.itemsService.findAll();
+  async findAll(): Promise<Item[]> {
+    return await this.itemsService.findAll();
   }
 
   @Get(':id')
-  findById(@Param('id') id: string): Item {
+  async findById(@Param('id') id: string): Promise<Item> {
     return this.itemsService.findById(id);
   }
 
@@ -23,10 +23,10 @@ export class ItemsController {
   }
 
   @Put(':id')
-  updateStatus(
+  async updateStatus(
     @Param('id') id: string,
     @Body('status') status: 'ON_SALE' | 'SOLD_OUT',
-  ): Item {
+  ): Promise<Item> {
     return this.itemsService.update(id, { status });
   }
 

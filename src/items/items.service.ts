@@ -9,16 +9,18 @@ export class ItemsService {
 
   private readonly items: Item[] = [];
 
-  findAll() {
-    return this.items;
+  async findAll(): Promise<Item[]> {
+    return await this.prismaService.item.findMany();
   }
 
-  findById(id: string): Item {
-    const item = this.items.find((it) => it.id === id);
-    if (!item) {
+  async findById(id: string): Promise<Item> {
+    const foundItem = await this.prismaService.item.findUnique({
+      where: { id },
+    });
+    if (!foundItem) {
       throw new NotFoundException('Item not found');
     }
-    return item;
+    return foundItem;
   }
 
   update(id: string, patch: Partial<Omit<Item, 'id'>>): Item {
