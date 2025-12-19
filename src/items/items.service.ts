@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ItemsService {
     constructor(private readonly prismaService: PrismaService) {}
 
-  private readonly items: Item[] = [];
+ 
 
   async findAll(): Promise<Item[]> {
     return await this.prismaService.item.findMany();
@@ -56,4 +56,6 @@ export class ItemsService {
       },
     });
   }
+
+  
 }
